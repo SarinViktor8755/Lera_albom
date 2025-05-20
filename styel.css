@@ -1,0 +1,902 @@
+      :root {
+            --primary-color: #025a63;
+            --secondary-color: #ffcc00;
+            --accent-color: #ff6699;
+            --dark-color: #013d42;
+            --light-color: #f8f9fa;
+            --text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, var(--dark-color), var(--primary-color));
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+		
+		
+		
+				@font-face {
+    font-family: 'Ustroke';
+    src: url('./fonts/Ustroke.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Для оптимизации загрузки */
+	
+
+}
+		
+		@font-face {
+    font-family: 'Binks';
+    src: url('./fonts/Okeanos.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap; /* Для оптимизации загрузки */
+	
+
+}
+
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        :target {
+            scroll-margin-top: 70px;
+        }
+
+        /* Навигация */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color)) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(37, 111, 117, 0.9) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-family: 'Ustroke', cursive;
+            font-size: 1.5rem;
+            color: var(--secondary-color) !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link {
+            color: var(--light-color) !important;
+            font-weight: 500;
+            margin: 0 10px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--secondary-color) !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        /* Основной контейнер */
+        .container {
+            max-width: 1000px;
+            margin: 10px auto 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 204, 0, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Заголовки */
+        h1 {
+			font-family: 'Ustroke', sans-serif !important;
+            padding: 50px 0;
+            text-align: center;
+            color: var(--text-color);
+            font-size: 6.5em;
+            margin-bottom: 30px;
+            font-family: 'Dancing Script', cursive;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+            border-radius: 3px;
+        }
+
+        .letter {
+            display: inline-block;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes snake {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(5deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(15px) rotate(-5deg); }
+        }
+
+        /* Элементы информации */
+        .info {
+            margin-bottom: 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .info p {
+            margin: 15px 0;
+            color: var(--text-color);
+            font-size: 1.2em;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .info p:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            vertical-align: middle;
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .info p:hover .emoji {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .highlight {
+            color: var(--secondary-color);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .info p:hover .highlight::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Слайд-шоу */
+        .slideshow-container {
+            width: 100%;
+            max-width: 400px;
+            height: 600px;
+            overflow: hidden;
+            position: relative;
+            border: 8px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            margin: 0 auto 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+        }
+
+        .slideshow-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .slideshow {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slideshow img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out, transform 1s ease;
+        }
+
+        .slideshow img.active {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        /* Прогресс-бары */
+        .progressBarContainer {
+            width: 100%;
+            margin: 15px auto;
+            height: 25px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            max-width: 600px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .progressBar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            width: 0%;
+            border-radius: 12px;
+            transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progressBar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                          rgba(255, 255, 255, 0.3) 0%, 
+                          rgba(255, 255, 255, 0.5) 50%, 
+                          rgba(255, 255, 255, 0.3) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+            border-radius: 12px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .progressBarContainer.complete {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+
+        .progressBarContainer.complete .progressBar {
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+        }
+
+        .progressBarContainer.complete::after {
+            content: '✔';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+            font-size: 1.2em;
+            z-index: 2;
+        }
+
+        /* Галерея фотографий */
+        .anniversary-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .anniversary-frame {
+            position: relative;
+            width: 360px;
+            height: 540px;
+            border: 10px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            background-color: rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .anniversary-frame:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .anniversary-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: scale(1.1);
+        }
+        
+        .anniversary-photo.loaded {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .anniversary-text {
+		
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--text-color);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, rgba(174, 17, 203, 0.8), rgba(75, 98, 137, 0.8));
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin: 0 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transition: all 0.5s ease;
+        }
+
+        /* Модальное окно */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s, visibility 0.4s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            background-color: #303030;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: modalFadeIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform: scale(0.8);
+        }
+
+        @keyframes modalFadeIn {
+            to { transform: scale(1); }
+        }
+        
+        .modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            display: block;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .close-modal:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .modal-text {
+			font-family: 'Binks', sans-serif !important;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            color: white;
+            font-size: 3.5rem;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* Разделители секций */
+        .section-divider {
+            width: 100%;
+            text-align: center;
+            margin: 50px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-divider::before,
+        .section-divider::after {
+            content: "";
+            display: inline-block;
+            width: 30%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .section-divider::before {
+            left: 0;
+        }
+        
+        .section-divider::after {
+            right: 0;
+        }
+        
+        .section-title {
+            display: inline-block;
+            padding: 0 25px;
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            position: relative;
+            z-index: 1;
+            color: var(--secondary-color);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .section-title:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Анимации и декоративные элементы */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-100px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+
+        .heart-bubble {
+            position: fixed;
+            font-size: 24px;
+            pointer-events: none;
+            animation: float-up 3s ease-out forwards, fade-in 0.5s ease-out;
+            opacity: 0;
+            z-index: 100;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes float-up {
+            0% { 
+                transform: translateY(0) scale(0.5);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translateY(-150px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fade-in {
+            0% { opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.8; }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkleFade 1s ease-out forwards;
+        }
+
+        @keyframes sparkleFade {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* Placeholder для изображений */
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--dark-color) 25%, var(--primary-color) 50%, var(--dark-color) 75%);
+            background-size: 200% 200%;
+            animation: placeholderShimmer 2s infinite linear;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5rem;
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        @keyframes placeholderShimmer {
+            0% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Подвал */
+        footer {
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 0px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 992px) {
+            .container {
+                padding: 20px;
+                margin: 70px auto 30px;
+            }
+            
+            h1 {
+                font-size: 4.8em;
+                padding: 20px 0;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                padding: 0 15px;
+            }
+            
+            .anniversary-frame {
+                width: 300px;
+                height: 450px;
+            }
+            
+            .anniversary-text {
+                font-size: 2rem;
+                margin: 0 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 4.2em;
+            }
+            
+            .info p {
+                font-size: 1em;
+                padding: 10px;
+            }
+            
+            .slideshow-container {
+                max-width: 450px;
+                height: 750px;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .anniversary-frame {
+                width: 250px;
+                height: 375px;
+                border-width: 8px;
+            }
+            
+            .anniversary-text {
+                font-size: 1.9em;
+                bottom: 15px;
+                padding: 8px 15px;
+            }
+            
+            .section-divider::before,
+            .section-divider::after {
+                width: 20%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 1.9em;
+            }
+            
+            .slideshow-container {
+                max-width: 280px;
+                height: 380px;
+            }
+            
+            .anniversary-frame {
+                width: 100%;
+                height: 400px;
+                max-width: 380px;
+            }
+            
+            .anniversary-text {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+		
+		
+		
+/* Стили для зеленого трек-бара */
+::-webkit-scrollbar {
+    width: 10px; /* Тонкий скроллбар */
+    height: 10px;
+}
+
+/* Фоновая дорожка */
+::-webkit-scrollbar-track {
+    background: rgba(2, 90, 99, 0.2); /* Полупрозрачный темно-зеленый */
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+/* Ползунок */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #4CAF50, #8BC34A); /* Зеленый градиент */
+    border-radius: 10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Ползунок при наведении */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #8BC34A, #4CAF50); /* Инвертированный градиент */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Для Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #4CAF50 rgba(2, 90, 99, 0.2);
+}
+
+/* Анимация при активном скролле */
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(135deg, #2E7D32, #4CAF50); /* Темно-зеленый */
+}
+
+.container-fluid {
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active ~ .container-fluid {
+    opacity: 0;
+    pointer-events: none;
+}
+
+        /* Специальные эффекты */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-color);
+            opacity: 0;
+            z-index: 999;
+            animation: confetti-fall 5s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .glow-text {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--secondary-color), 0 0 10px var(--accent-color);
+            }
+            to {
+                text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--accent-color), 0 0 30px var(--primary-color);
+            }
+        }
+
+        /* Кнопка "Наверх" */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 0.8;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+            background: var(--secondary-color);
+        }
+		
+		
+		.navbar {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+
+.modal-content img {
+    cursor: pointer; /* Меняем курсор на "кликабельный" при наведении на фото */
+    transition: transform 0.3s ease;
+}
+
+.modal-content img:hover {
+    transform: scale(0.98); /* Легкий эффект нажатия */
+}
+
+.close-modal {
+    z-index: 3; /* Поднимаем крестик над фото */
+    background: rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    transform: rotate(90deg) scale(1.1);
+    background: rgba(255, 0, 0, 0.7);
+}
+
+.modal-overlay.active ~ .navbar,
+.modal-overlay.active + .navbar {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-20px);
+}
+		
+		

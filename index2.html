@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фотоальбом Валерии</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary-color: #ff85a2;
+            --secondary-color: #ffd6e0;
+            --accent-color: #ff6b6b;
+            --text-color: #333;
+            --light-text: #fff;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #fff9fb;
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Particle background */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe8f0 100%);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="rgba(255,255,255,0.2)"><circle cx="25" cy="25" r="5"/><circle cx="75" cy="25" r="5"/><circle cx="50" cy="50" r="5"/><circle cx="25" cy="75" r="5"/><circle cx="75" cy="75" r="5"/></svg>');
+            opacity: 0.3;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--light-text);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            opacity: 0.9;
+        }
+        
+        /* Anniversary frames style */
+        .anniversary-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .anniversary-frame {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: white;
+        }
+        
+        .anniversary-frame:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .anniversary-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .anniversary-frame:hover .anniversary-photo {
+            transform: scale(1.1);
+        }
+        
+        .placeholder {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 214, 224, 0.8);
+            color: #333;
+            padding: 5px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .anniversary-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 214, 224, 0.8);
+            color: #333;
+            padding: 5px;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .section-divider {
+            text-align: center;
+            margin: 40px 0 20px;
+            position: relative;
+        }
+        
+        .section-divider::before, .section-divider::after {
+            content: "";
+            display: inline-block;
+            width: 30%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            position: absolute;
+            top: 50%;
+        }
+        
+        .section-divider::before {
+            left: 0;
+        }
+        
+        .section-divider::after {
+            right: 0;
+        }
+        
+        .section-title {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Modal for enlarged photos */
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .modal-header {
+            border-bottom: none;
+            background-color: var(--secondary-color);
+        }
+        
+        .modal-body {
+            padding: 0;
+            text-align: center;
+        }
+        
+        .modal-img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+        
+        .modal-title {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        /* Progress bars section */
+        .progress-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .progress-title .emoji {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .progress-title .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            background-color: #f0f0f0;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 10px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        /* Animation classes */
+        .animate-pop {
+            animation: popIn 0.5s ease-out;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            80% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .anniversary-frame {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .progress-section {
+                padding: 1.5rem;
+            }
+            
+            .section-divider::before,
+            .section-divider::after {
+                width: 20%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Header -->
+    <header class="header text-center animate__animated animate__fadeIn">
+        <div class="container">
+            <h1 class="animate__animated animate__bounceIn">Валерия</h1>
+            <p class="animate__animated animate__fadeInUp">Мой детский фотоальбом</p>
+            <div class="mt-3">
+                <span class="badge bg-light text-primary p-2 me-2 animate__animated animate__fadeInLeft">Дата рождения: 14.03.2025</span>
+                <span class="badge bg-light text-primary p-2 animate__animated animate__fadeInRight">Родилась в 10:15</span>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Progress Bars Section -->
+        <section class="progress-section animate__animated animate__fadeInUp">
+            <h2 class="text-center mb-4"><i class="fas fa-birthday-cake me-2"></i>До важных событий</h2>
+            
+            <div id="ageProgressBars">
+                <!-- Progress bars will be inserted here by JavaScript -->
+            </div>
+        </section>
+        
+        <!-- Photo Gallery -->
+        <section class="photo-gallery">
+            <h2 class="text-center mb-4 animate__animated animate__fadeIn"><i class="fas fa-camera-retro me-2"></i>Мои фотографии</h2>
+            
+            <!-- Первые фотографии -->
+            <div class="anniversary-row">
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.1s" onclick="openModal('./img/photo_2024-07-15_15-59-38.jpg', 'УЗИ 15.07.24')">
+                    <img data-src="./img/photo_2024-07-15_15-59-38.jpg" alt="15.07.24" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder">15.07.24</div>
+                    <div class="anniversary-text">15.07.24 (Луна)</div>
+                </div> 
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.2s" onclick="openModal('./img/photo_2025-03-31_07-40-50.jpg', '')">
+                    <img data-src="./img/photo_2025-03-31_07-40-50.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">_</div>
+                </div> 
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.3s" onclick="openModal('./img/minus2.jpg', '28.12.24')">
+                    <img data-src="./img/ezgif-815fda565eec18.gif" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">28.12.24</div>
+                </div> 
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.4s" onclick="openModal('./img/minus1.jpg', '3D УЗИ')">
+                    <img data-src="./img/minus1.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">3D УЗИ</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.5s" onclick="openModal('./img/photo_2025-03-26_22-17-03.jpg', '10.03.25')">
+                    <img data-src="./img/photo_2025-03-26_22-17-03.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text"> за 3 дня</div>
+                </div> 
+            </div>
+            
+            <!-- Раздел "Глава - 1" -->
+            <div class="section-divider">
+                <div class="section-title" id="gl1">Глава - 1</div>
+            </div>
+            
+            <div class="anniversary-row">
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.1s" onclick="openModal('./img/0day.jpg', 'Первый вдох жизни')">
+                    <img data-src="./img/0day.jpg" alt="Первый день" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">Hello World</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.2s" onclick="openModal('./img/3.jpg', 'день первый')">
+                    <img data-src="./img/3.jpg" alt="1 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">1 день</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.3s" onclick="openModal('./img/4.jpg', '4 день')">
+                    <img data-src="./img/4.jpg" alt="4 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">4 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.4s" onclick="openModal('./img/1.jpg', '5 дней')">
+                    <img data-src="./img/1.jpg" alt="5 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">5 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.5s" onclick="openModal('./img/10day.jpg', '10 дней')">
+                    <img data-src="./img/10day.jpg" alt="10 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">10 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.6s" onclick="openModal('./img/11day.jpg', '11 дней')">
+                    <img data-src="./img/11day.jpg" alt="11 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">11 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.7s" onclick="openModal('./img/12day.jpg', '12 дней')">
+                    <img data-src="./img/12day.jpg" alt="12 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">12 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.8s" onclick="openModal('./img/photo_2025-03-26_15-39-24.jpg', 'На работе')">
+                    <img data-src="./img/photo_2025-03-26_15-39-24.jpg" alt="На работе" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">На работе</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 0.9s" onclick="openModal('./img/photo_2025-03-27_15-35-02.jpg', '13 дней')">
+                    <img data-src="./img/photo_2025-03-27_15-35-02.jpg" alt="13 дней" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">13 дней</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.0s" onclick="openModal('./img/-2147483648_-213534.jpg', 'две недели')">
+                    <img data-src="./img/-2147483648_-213534.jpg" alt="две недели" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">две недели</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.1s" onclick="openModal('./img/22222222222222.jpg', 'Гуляю, чтобы открыть мир. 🌳🚶‍♀️')">
+                    <img data-src="./img/22222222222222.jpg" alt="Гуляю" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">Гуляю</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.2s" onclick="openModal('./img/Сплю.jpg', 'Сны о звёздах под закрытыми веками. 🌙💤')">
+                    <img data-src="./img/Сплю.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">Сплю</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.3s" onclick="openModal('./img/photo_2025-03-29_18-41-12.jpg', 'Даже малыши знают, как работать над своим будущим. 💼👶')">
+                    <img data-src="./img/photo_2025-03-29_18-41-12.jpg" alt="15" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">15</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.4s" onclick="openModal('./img/photo_2025-03-31_00-41-26 — 1.jpg', 'От первого вздоха до первых шагов: история роста. 🌱✨')">
+                    <img data-src="./img/photo_2025-03-31_00-41-26 — 1.jpg" alt="16" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">16</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.5s" onclick="openModal('./img/photo_2025-03-31_13-30-55.jpg', 'Каждый день приближает нас к новым открытиям. 🚀🌟 ДЕНЬ')">
+                    <img data-src="./img/photo_2025-03-31_13-30-55.jpg" alt="17" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">17</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.6s" onclick="openModal('./img/PXL_20250401_162439869_1.jpg', 'Рост — это не просто цифры, это эмоции. 📊💖')">
+                    <img data-src="./img/PXL_20250401_162439869_1.jpg" alt="18" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">18</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.7s" onclick="openModal('./img/photo_2025-04-02_20-41-31.jpg', 'Маленькие победы становятся большими достижениями. 🎉👶')">
+                    <img data-src="./img/photo_2025-04-02_20-41-31.jpg" alt="19" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">19</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.8s" onclick="openModal('./img/photo_2025-04-03_09-09-53.jpg', '20-ый ДЕНЬ')">
+                    <img data-src="./img/photo_2025-04-03_09-09-53.jpg" alt="20" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">20</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 1.9s" onclick="openModal('./img/photo_2025-04-05_12-42-45.jpg', '22-ый ДЕНЬ')">
+                    <img data-src="./img/photo_2025-04-05_12-42-45.jpg" alt="22" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">22</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 2.0s" onclick="openModal('./img/photo_2025-04-06_12-05-37.jpg', '23-ый ДЕНЬ')">
+                    <img data-src="./img/photo_2025-04-06_12-05-37.jpg" alt="23" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">23</div>
+                </div>
+                
+                <div class="anniversary-frame animate__animated animate__fadeIn animate-pop" style="animation-delay: 2.1s" onclick="openModal('./img/photo_2025-04-07_22-34-17.jpg', '24-ый ДЕНЬ')">
+                    <img data-src="./img/photo_2025-04-07_22-34-17.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                    <div class="placeholder"></div>
+                    <div class="anniversary-text">24</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- Photo Modal -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalPhotoTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="modalImage" src="" class="modal-img" alt="Увеличенное фото">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer text-center animate__animated animate__fadeInUp">
+        <div class="container">
+            <div class="floating" style="font-size: 2rem;">
+                <i class="fas fa-heart mx-2"></i>
+                <i class="fas fa-star mx-2"></i>
+                <i class="fas fa-heart mx-2"></i>
+            </div>
+            <p class="mt-3 mb-0">С любовью для нашей Валерии ❤️</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ff85a2"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffb6c1",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Photo modal
+            var photoModal = new bootstrap.Modal(document.getElementById('photoModal'));
+            
+            function openModal(imgSrc, title) {
+                var modalImg = document.getElementById('modalImage');
+                var modalTitle = document.getElementById('modalPhotoTitle');
+                
+                modalImg.src = imgSrc;
+                modalTitle.textContent = title;
+                photoModal.show();
+            }
+            
+            // Age calculation and progress bars
+            function calculateAge(birthDate) {
+                const now = new Date();
+                let years = now.getFullYear() - birthDate.getFullYear();
+                let months = now.getMonth() - birthDate.getMonth();
+                let days = now.getDate() - birthDate.getDate();
+                let hours = now.getHours() - birthDate.getHours();
+                let minutes = now.getMinutes() - birthDate.getMinutes();
+                let seconds = now.getSeconds() - birthDate.getSeconds();
+                
+                if (seconds < 0) {
+                    minutes--;
+                    seconds += 60;
+                }
+                if (minutes < 0) {
+                    hours--;
+                    minutes += 60;
+                }
+                if (hours < 0) {
+                    days--;
+                    hours += 24;
+                }
+                if (days < 0) {
+                    months--;
+                    days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+                }
+                if (months < 0) {
+                    years--;
+                    months += 12;
+                }
+                
+                return { years, months, days, hours, minutes, seconds };
+            }
+
+            // Расчет дней до дня рождения (исправленная версия)
+            function getDaysUntilBirthday(birthday) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Устанавливаем время на начало дня
+                
+                // Получаем день рождения в текущем году
+                let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+                
+                // Если день рождения в этом году уже прошел, берем следующий год
+                if (today > nextBirthday) {
+                    nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+                }
+                
+                // Разница в миллисекундах
+                const diffTime = nextBirthday - today;
+                
+                // Переводим в дни (округляем вверх)
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                return diffDays;
+            }
+
+            // Расчет дней до различных событий
+            function calculateDaysToEvents(birthDate) {
+                const now = new Date();
+                const currentYear = now.getFullYear();
+                
+                // Используем новую функцию для дня рождения
+                const daysToBirthday = getDaysUntilBirthday(birthDate);
+                
+                // До 5 лет
+                const fiveYearsDate = new Date(birthDate.getFullYear() + 5, birthDate.getMonth(), birthDate.getDate());
+                const daysTo5Years = Math.floor((fiveYearsDate - now) / (1000 * 60 * 60 * 24));
+                
+                // До школы (7 лет)
+                const schoolDate = new Date(birthDate.getFullYear() + 7, 8, 1); // 1 сентября через 7 лет
+                const daysToSchool = Math.floor((schoolDate - now) / (1000 * 60 * 60 * 24));
+                
+                // До 10 лет
+                const tenYearsDate = new Date(birthDate.getFullYear() + 10, birthDate.getMonth(), birthDate.getDate());
+                const daysTo10Years = Math.floor((tenYearsDate - now) / (1000 * 60 * 60 * 24));
+                
+                // До 18 лет
+                const eighteenYearsDate = new Date(birthDate.getFullYear() + 18, birthDate.getMonth(), birthDate.getDate());
+                const daysTo18Years = Math.floor((eighteenYearsDate - now) / (1000 * 60 * 60 * 24));
+                
+                // До пенсии (женщины - 60 лет)
+                const retirementDate = new Date(birthDate.getFullYear() + 60, birthDate.getMonth(), birthDate.getDate());
+                const daysToRetirement = Math.floor((retirementDate - now) / (1000 * 60 * 60 * 24));
+                
+                return {
+                    daysToBirthday,
+                    daysTo5Years,
+                    daysToSchool,
+                    daysTo10Years,
+                    daysTo18Years,
+                    daysToRetirement
+                };
+            }
+
+            // Обновление прогресс-бара с учетом наступивших событий
+            function updateProgressBar(barId, daysRemaining, totalDays, eventName) {
+                const progressBar = document.getElementById(barId);
+                const container = progressBar.parentElement;
+                const textElement = container.previousElementSibling;
+                
+                // Если событие уже прошло (дни отрицательные)
+                if (daysRemaining <= 0) {
+                    // Устанавливаем соответствующий текст для каждого события
+                    switch(barId) {
+                        case 'progressBarSchool':
+                            textElement.innerHTML = `<span class="emoji">📚</span> Школа: <span class="highlight">Уже в школе!</span>`;
+                            break;
+                        case 'progressBar5':
+                            textElement.innerHTML = `<span class="emoji">🎈</span> 5 лет: <span class="highlight">Уже исполнилось!</span>`;
+                            break;
+                        case 'progressBar10':
+                            textElement.innerHTML = `<span class="emoji">🌟</span> 10 лет: <span class="highlight">Уже есть!</span>`;
+                            break;
+                        case 'progressBar18':
+                            textElement.innerHTML = `<span class="emoji">🎉</span> 18 лет: <span class="highlight">Уже взрослый!</span>`;
+                            break;
+                        case 'progressBarRetirement':
+                            textElement.innerHTML = `<span class="emoji">👵</span> Пенсия: <span class="highlight">Поздравляю, бабушка!</span>`;
+                            break;
+                        case 'progressBarYear':
+                            textElement.innerHTML = `<span class="emoji">🎂</span> День рождения: <span class="highlight">Сегодня!</span>`;
+                            break;
+                        default:
+                            textElement.innerHTML = textElement.innerHTML.replace("До", "Уже");
+                    }
+                    
+                    progressBar.style.width = "100%";
+                    progressBar.setAttribute('aria-valuenow', 100);
+                    progressBar.textContent = "100%";
+                    return;
+                }
+                
+                // Расчет процентов
+                const percentage = Math.round(((totalDays - daysRemaining) / totalDays) * 100);
+                progressBar.style.width = `${percentage}%`;
+                progressBar.setAttribute('aria-valuenow', percentage);
+                progressBar.textContent = `${percentage}%`;
+                
+                // Обновление текста
+                textElement.innerHTML = textElement.innerHTML.replace(/\d+ дней/, `${daysRemaining} дней`);
+            }
+            
+            // Инициализация прогресс-баров
+            function initProgressBars() {
+                const birthDate = new Date('2025-03-14T10:15:00');
+                const age = calculateAge(birthDate);
+                const events = calculateDaysToEvents(birthDate);
+                
+                const ageBarsContainer = document.getElementById('ageProgressBars');
+                
+                // Создаем HTML для прогресс-баров
+                ageBarsContainer.innerHTML = `
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">👶</span> Возраст: ${age.years} лет, ${age.months} месяцев, ${age.days} дней</div>
+                        <div class="progress">
+                            <div id="progressBarAge" class="progress-bar" role="progressbar" style="width: ${(age.months / 12 * 100).toFixed(2)}%" aria-valuenow="${age.months}" aria-valuemin="0" aria-valuemax="12">${age.months} мес.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">🎂</span> До дня рождения: ${events.daysToBirthday} дней</div>
+                        <div class="progress">
+                            <div id="progressBarYear" class="progress-bar" role="progressbar" style="width: ${((365 - events.daysToBirthday) / 365 * 100).toFixed(2)}%" aria-valuenow="${365 - events.daysToBirthday}" aria-valuemin="0" aria-valuemax="365">${((365 - events.daysToBirthday) / 365 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">🎈</span> До 5 лет: ${events.daysTo5Years > 0 ? events.daysTo5Years + ' дней' : 'Уже исполнилось!'}</div>
+                        <div class="progress">
+                            <div id="progressBar5" class="progress-bar" role="progressbar" style="width: ${((1825 - events.daysTo5Years) / 1825 * 100).toFixed(2)}%" aria-valuenow="${1825 - events.daysTo5Years}" aria-valuemin="0" aria-valuemax="1825">${((1825 - events.daysTo5Years) / 1825 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">📚</span> До школы (7 лет): ${events.daysToSchool > 0 ? events.daysToSchool + ' дней' : 'Уже в школе!'}</div>
+                        <div class="progress">
+                            <div id="progressBarSchool" class="progress-bar" role="progressbar" style="width: ${((2555 - events.daysToSchool) / 2555 * 100).toFixed(2)}%" aria-valuenow="${2555 - events.daysToSchool}" aria-valuemin="0" aria-valuemax="2555">${((2555 - events.daysToSchool) / 2555 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">🌟</span> До 10 лет: ${events.daysTo10Years > 0 ? events.daysTo10Years + ' дней' : 'Уже есть!'}</div>
+                        <div class="progress">
+                            <div id="progressBar10" class="progress-bar" role="progressbar" style="width: ${((3650 - events.daysTo10Years) / 3650 * 100).toFixed(2)}%" aria-valuenow="${3650 - events.daysTo10Years}" aria-valuemin="0" aria-valuemax="3650">${((3650 - events.daysTo10Years) / 3650 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">🎉</span> До 18 лет: ${events.daysTo18Years > 0 ? events.daysTo18Years + ' дней' : 'Уже взрослый!'}</div>
+                        <div class="progress">
+                            <div id="progressBar18" class="progress-bar" role="progressbar" style="width: ${((6570 - events.daysTo18Years) / 6570 * 100).toFixed(2)}%" aria-valuenow="${6570 - events.daysTo18Years}" aria-valuemin="0" aria-valuemax="6570">${((6570 - events.daysTo18Years) / 6570 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="progress-title"><span class="emoji">👵</span> До пенсии (60 лет): ${events.daysToRetirement > 0 ? events.daysToRetirement + ' дней' : 'Поздравляю, бабушка!'}</div>
+                        <div class="progress">
+                            <div id="progressBarRetirement" class="progress-bar" role="progressbar" style="width: ${((21900 - events.daysToRetirement) / 21900 * 100).toFixed(2)}%" aria-valuenow="${21900 - events.daysToRetirement}" aria-valuemin="0" aria-valuemax="21900">${((21900 - events.daysToRetirement) / 21900 * 100).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                `;
+                
+                // Обновляем прогресс-бары каждую секунду
+                setInterval(() => {
+                    const updatedAge = calculateAge(birthDate);
+                    const updatedEvents = calculateDaysToEvents(birthDate);
+                    
+                    // Обновление текста возраста
+                    const ageTitle = ageBarsContainer.querySelector('.progress-title:first-child');
+                    if (ageTitle) {
+                        ageTitle.innerHTML = `<span class="emoji">👶</span> Возраст: ${updatedAge.years} лет, ${updatedAge.months} месяцев, ${updatedAge.days} дней`;
+                    }
+                    
+                    // Обновление прогресс-бара возраста
+                    const ageProgress = document.getElementById('progressBarAge');
+                    if (ageProgress) {
+                        ageProgress.style.width = `${(updatedAge.months / 12 * 100).toFixed(2)}%`;
+                        ageProgress.setAttribute('aria-valuenow', updatedAge.months);
+                        ageProgress.textContent = `${updatedAge.months} мес.`;
+                    }
+                    
+                    // Обновление остальных прогресс-баров
+                    updateProgressBar('progressBarYear', updatedEvents.daysToBirthday, 365, 'День рождения');
+                    updateProgressBar('progressBar5', updatedEvents.daysTo5Years, 1825, '5 лет');
+                    updateProgressBar('progressBarSchool', updatedEvents.daysToSchool, 2555, 'Школа');
+                    updateProgressBar('progressBar10', updatedEvents.daysTo10Years, 3650, '10 лет');
+                    updateProgressBar('progressBar18', updatedEvents.daysTo18Years, 6570, '18 лет');
+                    updateProgressBar('progressBarRetirement', updatedEvents.daysToRetirement, 21900, 'Пенсия');
+                }, 1000);
+            }
+            
+            // Инициализируем прогресс-бары после загрузки страницы
+            initProgressBars();
+            
+            // Lazy loading images
+            document.addEventListener("DOMContentLoaded", function() {
+                const lazyImages = [].slice.call(document.querySelectorAll("img[data-src]"));
+                
+                if ("IntersectionObserver" in window) {
+                    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                        entries.forEach(function(entry) {
+                            if (entry.isIntersecting) {
+                                let lazyImage = entry.target;
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.removeAttribute("data-src");
+                                lazyImageObserver.unobserve(lazyImage);
+                            }
+                        });
+                    });
+                    
+                    lazyImages.forEach(function(lazyImage) {
+                        lazyImageObserver.observe(lazyImage);
+                    });
+                } else {
+                    // Fallback for browsers without IntersectionObserver
+                    lazyImages.forEach(function(lazyImage) {
+                        lazyImage.src = lazyImage.dataset.src;
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фотоальбом Валерии</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ff9ff3;
+            --secondary-color: #feca57;
+            --accent-color: #ff6b6b;
+            --text-color: #576574;
+            --light-color: #f7f7f7;
+            --dark-color: #222f3e;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: var(--light-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            background-image: url('https://img.freepik.com/free-vector/hand-painted-watercolor-pastel-sky-background_23-2148902771.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(255,159,243,0.8) 0%, rgba(254,202,87,0.8) 100%);
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #ff9ff3, #feca57, #ff6b6b, #48dbfb, #1dd1a1, #ff9ff3);
+            background-size: 600% 100%;
+            animation: rainbow 10s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% {background-position: 0% 50%}
+            100% {background-position: 100% 50%}
+        }
+        
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {transform: scale(1)}
+            50% {transform: scale(1.05)}
+            100% {transform: scale(1)}
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .section-divider {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 15px;
+            margin: 30px 0;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-divider::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://www.transparenttextures.com/patterns/always-grey.png');
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .anniversary-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .anniversary-frame {
+            width: 150px;
+            height: 180px;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: white;
+        }
+        
+        .anniversary-frame:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        
+        .anniversary-photo {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .anniversary-frame:hover .anniversary-photo {
+            transform: scale(1.1);
+        }
+        
+        .placeholder {
+            height: 120px;
+            background: linear-gradient(45deg, #f3f3f3, #e0e0e0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+        
+        .anniversary-text {
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--dark-color);
+            background-color: white;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            background-color: rgba(0,0,0,0.9);
+        }
+        
+        .modal-content {
+            background: transparent;
+            border: none;
+        }
+        
+        .modal-body {
+            padding: 0;
+            text-align: center;
+        }
+        
+        .modal-img {
+            max-height: 80vh;
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .modal-caption {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: rgba(0,0,0,0.7);
+            border-radius: 5px;
+        }
+        
+        .btn-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            color: white;
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        
+        /* Трек-бары */
+        .tracker-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tracker-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-text {
+            font-size: 1rem;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .progress-text .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .progress-text .emoji {
+            margin-right: 8px;
+        }
+        
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+            background-color: #f1f1f1;
+            overflow: visible;
+        }
+        
+        .progress-bar {
+            border-radius: 10px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            position: relative;
+            transition: width 1s ease-in-out;
+        }
+        
+        .progress-bar::after {
+            content: attr(aria-valuenow) "%";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Анимации */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Футер */
+        .footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 50px;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .heart {
+            color: var(--accent-color);
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% {transform: scale(1)}
+            25% {transform: scale(1.1)}
+            50% {transform: scale(1)}
+            75% {transform: scale(1.1)}
+            100% {transform: scale(1)}
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .anniversary-frame {
+                width: 120px;
+                height: 150px;
+            }
+            
+            .anniversary-photo, .placeholder {
+                height: 100px;
+            }
+            
+            .anniversary-text {
+                height: 50px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .anniversary-frame {
+                width: 100px;
+                height: 130px;
+            }
+            
+            .anniversary-photo, .placeholder {
+                height: 80px;
+            }
+            
+            .anniversary-text {
+                height: 50px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Частицы фона -->
+    <div id="particles-js"></div>
+    
+    <!-- Шапка -->
+    <header class="header text-center">
+        <div class="container">
+            <h1 class="title animate__animated animate__bounceInDown">Валерия</h1>
+            <p class="subtitle animate__animated animate__fadeIn">Мой первый фотоальбом</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <!-- Трекер возраста -->
+        <div class="tracker-container animate-on-scroll">
+            <h2 class="tracker-title">Моя жизнь в цифрах</h2>
+            
+            <div class="progress-container">
+                <div class="progress-text">
+                    <span><span class="emoji">👶</span> Возраст: <span class="highlight" id="ageText">0 лет 0 месяцев 0 дней</span></span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="birthdayText">
+                    <span><span class="emoji">🎂</span> До дня рождения: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBarYear" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="fiveYearsText">
+                    <span><span class="emoji">🎈</span> До 5 лет: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar5" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="schoolText">
+                    <span><span class="emoji">📚</span> До школы: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBarSchool" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="tenYearsText">
+                    <span><span class="emoji">🌟</span> До 10 лет: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar10" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="eighteenYearsText">
+                    <span><span class="emoji">🎉</span> До 18 лет: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar18" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-text" id="retirementText">
+                    <span><span class="emoji">👵</span> До пенсии: <span class="highlight">0 дней</span></span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBarRetirement" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Раздел "Глава - 1" -->
+        <div class="section-divider animate-on-scroll">
+            <div class="section-title" id="gl1">Глава - 1</div>
+        </div>
+        
+        <div class="anniversary-row">
+            <div class="anniversary-frame" onclick="openModal('./img/0day.jpg', 'Первый вдох жизни')">
+                <img data-src="./img/0day.jpg" alt="Первый день" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Hello World</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/3.jpg', 'день первый')">
+                <img data-src="./img/3.jpg" alt="1 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">1 день</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/4.jpg', '4 день')">
+                <img data-src="./img/4.jpg" alt="4 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">4 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/1.jpg', '5 дней')">
+                <img data-src="./img/1.jpg" alt="5 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">5 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/10day.jpg', '10 дней')">
+                <img data-src="./img/10day.jpg" alt="10 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">10 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/11day.jpg', '11 дней')">
+                <img data-src="./img/11day.jpg" alt="11 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">11 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/12day.jpg', '12 дней')">
+                <img data-src="./img/12day.jpg" alt="12 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">12 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-26_15-39-24.jpg', 'На работе')">
+                <img data-src="./img/photo_2025-03-26_15-39-24.jpg" alt="На работе" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">На работе</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-27_15-35-02.jpg', '13 дней')">
+                <img data-src="./img/photo_2025-03-27_15-35-02.jpg" alt="13 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">13 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/-2147483648_-213534.jpg', 'две недели')">
+                <img data-src="./img/-2147483648_-213534.jpg" alt="две недели" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">две недели</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/22222222222222.jpg', 'Гуляю')">
+                <img data-src="./img/22222222222222.jpg" alt="Гуляю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Гуляю</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/Сплю.jpg', 'Сплю')">
+                <img data-src="./img/Сплю.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Сплю</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-29_18-41-12.jpg', '15-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-03-29_18-41-12.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">15</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-31_00-41-26.jpg', '16-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-03-31_00-41-26 — 1.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">16</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-31_13-30-551.jpg', '17-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-03-31_13-30-55.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">17</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/PXL_20250401_162439869.jpg', '18-ый ДЕНЬ')">
+                <img data-src="./img/PXL_20250401_162439869_1.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">18</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-02_20-41-31.jpg', '19-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-02_20-41-31.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">19</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-03_09-09-53.jpg', '20-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-03_09-09-53.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">20</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <p>С любовью <span class="heart">❤</span> для Валерии</p>
+            <p>© 2025 Фотоальбом. Все права защищены.</p>
+        </div>
+    </footer>
+    
+    <!-- Модальное окно -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-body">
+                    <img id="modalImage" class="modal-img" src="">
+                    <div id="modalCaption" class="modal-caption"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Инициализация частиц
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": ["#ff9ff3", "#feca57", "#ff6b6b", "#48dbfb", "#1dd1a1"]
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 5,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ff9ff3",
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": true,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+            
+            // Ленивая загрузка изображений
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            const lazyLoad = function() {
+                lazyImages.forEach(img => {
+                    if (img.getBoundingClientRect().top < window.innerHeight && !img.src) {
+                        img.src = img.getAttribute('data-src');
+                        img.removeAttribute('data-src');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', lazyLoad);
+            window.addEventListener('resize', lazyLoad);
+            lazyLoad();
+            
+            // Анимация при скролле
+            const animateElements = document.querySelectorAll('.animate-on-scroll');
+            
+            const animateOnScroll = function() {
+                animateElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', animateOnScroll);
+            animateOnScroll();
+            
+            // Расчеты возраста и прогресс-баров
+            updateAgeAndProgress();
+            setInterval(updateAgeAndProgress, 1000);
+        });
+        
+        // Модальное окно
+        function openModal(imageSrc, caption) {
+            const modalImage = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+            
+            modalImage.src = imageSrc;
+            modalCaption.textContent = caption;
+            
+            const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+            modal.show();
+        }
+        
+        // Расчет возраста
+        function calculateAge(birthDate) {
+            const now = new Date();
+            let years = now.getFullYear() - birthDate.getFullYear();
+            let months = now.getMonth() - birthDate.getMonth();
+            let days = now.getDate() - birthDate.getDate();
+            let hours = now.getHours() - birthDate.getHours();
+            let minutes = now.getMinutes() - birthDate.getMinutes();
+            let seconds = now.getSeconds() - birthDate.getSeconds();
+            
+            if (seconds < 0) {
+                minutes--;
+                seconds += 60;
+            }
+            if (minutes < 0) {
+                hours--;
+                minutes += 60;
+            }
+            if (hours < 0) {
+                days--;
+                hours += 24;
+            }
+            if (days < 0) {
+                months--;
+                days += new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            
+            return { years, months, days, hours, minutes, seconds };
+        }
+        
+        // Расчет дней до дня рождения (исправленная версия)
+        function getDaysUntilBirthday(birthday) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Устанавливаем время на начало дня
+            
+            // Получаем день рождения в текущем году
+            let nextBirthday = new Date(today.getFullYear(), birthday.getMonth(), birthday.getDate());
+            
+            // Если день рождения в этом году уже прошел, берем следующий год
+            if (today > nextBirthday) {
+                nextBirthday = new Date(today.getFullYear() + 1, birthday.getMonth(), birthday.getDate());
+            }
+            
+            // Разница в миллисекундах
+            const diffTime = nextBirthday - today;
+            
+            // Переводим в дни (округляем вверх)
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays;
+        }
+        
+        // Расчет дней до различных событий
+        function calculateDaysToEvents(birthDate) {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            
+            // Используем новую функцию для дня рождения
+            const daysToBirthday = getDaysUntilBirthday(birthDate);
+            
+            // До 5 лет
+            const fiveYearsDate = new Date(birthDate.getFullYear() + 5, birthDate.getMonth(), birthDate.getDate());
+            const daysTo5Years = Math.floor((fiveYearsDate - now) / (1000 * 60 * 60 * 24));
+            
+            // До школы (7 лет)
+            const schoolDate = new Date(birthDate.getFullYear() + 7, 8, 1); // 1 сентября через 7 лет
+            const daysToSchool = Math.floor((schoolDate - now) / (1000 * 60 * 60 * 24));
+            
+            // До 10 лет
+            const tenYearsDate = new Date(birthDate.getFullYear() + 10, birthDate.getMonth(), birthDate.getDate());
+            const daysTo10Years = Math.floor((tenYearsDate - now) / (1000 * 60 * 60 * 24));
+            
+            // До 18 лет
+            const eighteenYearsDate = new Date(birthDate.getFullYear() + 18, birthDate.getMonth(), birthDate.getDate());
+            const daysTo18Years = Math.floor((eighteenYearsDate - now) / (1000 * 60 * 60 * 24));
+            
+            // До пенсии (женщины - 60 лет)
+            const retirementDate = new Date(birthDate.getFullYear() + 60, birthDate.getMonth(), birthDate.getDate());
+            const daysToRetirement = Math.floor((retirementDate - now) / (1000 * 60 * 60 * 24));
+            
+            return {
+                daysToBirthday,
+                daysTo5Years,
+                daysToSchool,
+                daysTo10Years,
+                daysTo18Years,
+                daysToRetirement
+            };
+        }
+        
+        // Обновление прогресс-бара с учетом наступивших событий
+        function updateProgressBar(barId, daysRemaining, totalDays, eventName) {
+            const progressBar = document.getElementById(barId);
+            const container = progressBar.parentElement;
+            const textElement = container.previousElementSibling;
+            
+            // Если событие уже прошло (дни отрицательные)
+            if (daysRemaining <= 0) {
+                // Устанавливаем соответствующий текст для каждого события
+                switch(barId) {
+                    case 'progressBarSchool':
+                        textElement.innerHTML = `<span class="emoji">📚</span> Школа: <span class="highlight">Уже в школе!</span>`;
+                        break;
+                    case 'progressBar5':
+                        textElement.innerHTML = `<span class="emoji">🎈</span> 5 лет: <span class="highlight">Уже исполнилось!</span>`;
+                        break;
+                    case 'progressBar10':
+                        textElement.innerHTML = `<span class="emoji">🌟</span> 10 лет: <span class="highlight">Уже есть!</span>`;
+                        break;
+                    case 'progressBar18':
+                        textElement.innerHTML = `<span class="emoji">🎉</span> 18 лет: <span class="highlight">Уже взрослый!</span>`;
+                        break;
+                    case 'progressBarRetirement':
+                        textElement.innerHTML = `<span class="emoji">👵</span> Пенсия: <span class="highlight">Поздравляю, бабушка!</span>`;
+                        break;
+                    case 'progressBarYear':
+                        textElement.innerHTML = `<span class="emoji">🎂</span> День рождения: <span class="highlight">Сегодня!</span>`;
+                        break;
+                    default:
+                        textElement.innerHTML = textElement.innerHTML.replace("До", "Уже");
+                }
+                
+                progressBar.style.width = "100%";
+                progressBar.setAttribute('aria-valuenow', 100);
+                return;
+            }
+            
+            // Обновляем текст
+            textElement.innerHTML = textElement.innerHTML.replace(/\d+ дней/, `${daysRemaining} дней`);
+            
+            // Рассчитываем процент выполнения
+            const percentage = Math.round(((totalDays - daysRemaining) / totalDays) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressBar.setAttribute('aria-valuenow', percentage);
+        }
+        
+        // Обновление возраста и всех прогресс-баров
+        function updateAgeAndProgress() {
+            // Дата рождения Валерии - 14 марта 2025 года, 10:15
+            const birthDate = new Date('2025-03-14T10:15:00');
+            const now = new Date();
+            
+            // Расчет возраста
+            const age = calculateAge(birthDate);
+            document.getElementById('ageText').textContent = 
+                `${age.years} лет ${age.months} месяцев ${age.days} дней`;
+            
+            // Расчет дней до событий
+            const daysToEvents = calculateDaysToEvents(birthDate);
+            
+            // Обновление прогресс-баров
+            updateProgressBar('progressBarYear', daysToEvents.daysToBirthday, 365, "День рождения");
+            
+            // До 5 лет: 5 лет = 1825 дней
+            updateProgressBar('progressBar5', daysToEvents.daysTo5Years, 1825, "5 лет");
+            
+            // До школы: 7 лет = 2555 дней
+            updateProgressBar('progressBarSchool', daysToEvents.daysToSchool, 2555, "Школа");
+            
+            // До 10 лет: 10 лет = 3650 дней
+            updateProgressBar('progressBar10', daysToEvents.daysTo10Years, 3650, "10 лет");
+            
+            // До 18 лет: 18 лет = 6570 дней
+            updateProgressBar('progressBar18', daysToEvents.daysTo18Years, 6570, "18 лет");
+            
+            // До пенсии: 60 лет = 21900 дней
+            updateProgressBar('progressBarRetirement', daysToEvents.daysToRetirement, 21900, "Пенсия");
+        }
+    </script>
+</body>
+</html>

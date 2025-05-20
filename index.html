@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Валерия: История роста</title>
+    <link rel="icon" type="image/x-icon" href="icons8.png">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+   
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+	<link rel="stylesheet" href="styel.css">
+
+    <style>
+          /* Анимация частиц в стиле DOOM/Windows */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: particleFly linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes particleFly {
+            0% {
+                transform: translate3d(0, 0, 0) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate3d(var(--tx), var(--ty), 0) scale(1.2);
+                opacity: 1;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate3d(calc(var(--tx) * 2), calc(var(--ty) * 2), 0) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Остальные стили остаются без изменений */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background: rgba(10, 10, 26, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .container {
+            padding-top: 80px;
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Плавающие элементы фона -->
+    <div class="floating-elements">
+        <div class="floating-element" style="width: 100px; height: 100px; top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-element" style="width: 150px; height: 150px; top: 60%; left: 80%; animation-delay: 2s;"></div>
+        <div class="floating-element" style="width: 80px; height: 80px; top: 30%; left: 50%; animation-delay: 4s;"></div>
+        <div class="floating-element" style="width: 120px; height: 120px; top: 70%; left: 20%; animation-delay: 6s;"></div>
+    </div>
+<div class="particles-container" id="particlesContainer"></div>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Валерия</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#age"><i class="fas fa-baby mr-1"></i> Возраст</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#perv"><i class="fas fa-history mr-1"></i> Предыстория</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gl1"><i class="fas fa-book-open mr-1"></i> Глава 1</a>
+                    </li>
+					                    <li class="nav-item">
+                        <a class="nav-link" href="#gl2"><i class="fas fa-book-open mr-1"></i> Глава 2</a>
+                    </li>
+					                    <li class="nav-item">
+                        <a class="nav-link" href="#gl3"><i class="fas fa-book-open mr-1"></i> Глава 3</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container unselectable">
+        <h1 id="name-title"><span class="glow-text">✨</span><span id="name-letters"></span><span class="glow-text">✨</span></h1>
+        
+        <div class="info">
+            <div class="slideshow-container">
+                <div class="slideshow" id="slideshow">
+                    <img src="img/1.jpg" class="active" loading="lazy">
+                    <img src="img/5.jpg" loading="lazy">
+                    <img src="img/3.jpg" loading="lazy">
+                    <img src="img/2.jpg" loading="lazy">
+                    <img src="img/4.jpg" loading="lazy">
+                    <img src="img/6.jpg" loading="lazy">
+					<img src="img/PXL_20250401_162439869_1.jpg" loading="lazy">
+					
+                </div>
+            </div>         
+            <p id="age"><span class="emoji">👶</span> Возраст ребенка: <span class="highlight"><br>0 лет, 0 месяцев, 0 дней</span><br></p>
+            <p id="nextBirthday"><span class="emoji">🎂</span> До следующего дня рождения: <span class="highlight">355 дней</span></p>
+            <div class="progressBarContainer">
+                <div id="progressBarYear" class="progressBar" style="width: 2.88186%;"></div>
+            </div>
+			
+			<p id="totalDays"><span class="emoji">📅</span> Всего дней жизни: <span class="highlight"></span></p>
+<div class="progressBarContainer">
+    <div id="progressBarTotalDays" class="progressBar" style="width: 0%;"></div>
+</div>
+
+<p id="kindergartenTime"><span class="emoji">🏫</span> До детского сада: <span class="highlight"></span></p>
+<div class="progressBarContainer">
+    <div id="progressBarKindergarten" class="progressBar" style="width: 0%;"></div>
+</div>
+			
+            <p id="fiveYears"><span class="emoji">🎈</span> До 5-летия: <span class="highlight"></span></p>
+            <div class="progressBarContainer">
+                <div id="progressBar5" class="progressBar" style="width: 0.552668%;"></div>
+            </div>
+            <p id="schoolTime"><span class="emoji">📚</span> До школы: <span class="highlight"></span></p>
+            <div class="progressBarContainer">
+                <div id="progressBarSchool" class="progressBar" style="width: 0.369989%;"></div>
+            </div>
+            <p id="tenYears"><span class="emoji">🌟</span> До 10-летия: <span class="highlight"></span></p>
+            <div class="progressBarContainer">
+                <div id="progressBar10" class="progressBar" style="width: 0.276334%;"></div>
+            </div>
+            <p id="eighteenYears"><span class="emoji">🎉</span> До 18-летия: <span class="highlight"></span></p>
+            <div class="progressBarContainer">
+                <div id="progressBar18" class="progressBar" style="width: 0.15351%;"></div>
+            </div>
+            <p id="retirement"><span class="emoji">👵</span> До пенсии: <span class="highlight"></span></p>
+            <div class="progressBarContainer">
+                <div id="progressBarRetirement" class="progressBar" style="width: 0.0460493%;"></div>
+            </div>
+        </div>
+        
+        <!-- Раздел "Первые дни" -->
+        <div class="section-divider">
+            <div class="section-title" id="perv">Предыстория</div>
+        </div>
+        
+        <div class="anniversary-row">
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2024-07-15_15-59-38.jpg', 'УЗИ 15.07.24')">
+                <img data-src="./img/photo_2024-07-15_15-59-38.jpg" alt="15.07.24" class="anniversary-photo" loading="lazy">
+                <div class="placeholder">15.07.24</div>
+                <div class="anniversary-text">15.07.24 (Луна)</div>
+            </div> 
+			
+
+			
+						<div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-31_07-40-50.jpg', '')">
+                <img data-src="./img/photo_2025-03-31_07-40-50.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">_</div>
+            </div> 
+			
+
+            <div class="anniversary-frame" onclick="openModal('./img/minus2.jpg', '28.12.24')">
+                <img data-src="./img/ezgif-815fda565eec18.gif" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">28.12.24</div>
+            </div> 
+            
+            <div class="anniversary-frame" onclick="openModal('./img/minus1.jpg', '3D УЗИ')">
+                <img data-src="./img/minus1.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">3D УЗИ</div>
+            </div>
+			
+			
+						<div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-26_22-17-03.jpg', '10.03.25')">
+                <img data-src="./img/photo_2025-03-26_22-17-03.jpg" alt="УЗИ" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text"> за 3 дня</div>
+            </div> 
+            
+        </div>
+        
+        <!-- Раздел "Глава - 1" -->
+        <div class="section-divider">
+            <div class="section-title" id="gl1">Глава - 1<br>(Вес:2820г, Рост 52 см)</div>
+        </div>
+        
+        <div class="anniversary-row">
+            <div class="anniversary-frame" onclick="openModal('./img/0day.jpg', 'Первый вдох жизни')">
+                <img data-src="./img/0day.jpg" alt="Первый день" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Hello World</div>
+            </div>
+			
+			<div class="anniversary-frame" onclick="openModal('./img/3.jpg', 'день первый')">
+                <img data-src="./img/3.jpg" alt="1 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">1 день</div>
+            </div>
+            
+			
+
+			
+			
+			<div class="anniversary-frame" onclick="openModal('./img/4.jpg', '4 день')">
+                <img data-src="./img/4.jpg" alt="4 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">4 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/1.jpg', '5 дней')">
+                <img data-src="./img/1.jpg" alt="5 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">5 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/10day.jpg', '10 дней')">
+                <img data-src="./img/10day.jpg" alt="10 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">10 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/11day.jpg', '11 дней')">
+                <img data-src="./img/11day.jpg" alt="11 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">11 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/12day.jpg', '12 дней')">
+                <img data-src="./img/12day.jpg" alt="12 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">12 дней</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-26_15-39-24.jpg', 'На работе')">
+                <img data-src="./img/photo_2025-03-26_15-39-24.jpg" alt="На работе" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">На работе</div>
+            </div>
+            
+            <div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-27_15-35-02.jpg', '13 дней')">
+                <img data-src="./img/photo_2025-03-27_15-35-02.jpg" alt="13 дней" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">13 дней</div>
+            </div>
+            
+
+			
+			    <div class="anniversary-frame" onclick="openModal('./img/-2147483648_-213534.jpg', 'две недели')">
+                <img data-src="./img/-2147483648_-213534.jpg" alt="две недели" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">две недели</div>
+				</div>
+				
+				
+			     <div class="anniversary-frame" onclick="openModal('./img/22222222222222.jpg', 'Гуляю, чтобы открыть мир. 🌳🚶‍♀️')">
+                <img data-src="./img/22222222222222.jpg" alt="Гуляю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Гуляю</div>
+				</div>
+				
+				<div class="anniversary-frame" onclick="openModal('./img/4441.jpg', 'Сны о звёздах под закрытыми веками. 🌙💤')">
+                <img data-src="./img/4441.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                <div class="placeholder"></div>
+                <div class="anniversary-text">Сплю</div>
+				</div>
+				
+				
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-29_18-41-12.jpg', 'Даже малыши знают, как работать над своим будущим. 💼👶')">
+                <img data-src="./img/photo_2025-03-29_18-41-12.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">15</div>
+				</div>
+				
+								<div class="anniversary-frame" onclick="openModal('./img/22222222222222.jpg', 'От первого вздоха до первых шагов: история роста. 🌱✨')">
+                <img data-src="./img/22222222222222.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">16</div>
+				</div>
+				
+				
+												<div class="anniversary-frame" onclick="openModal('./img/photo_2025-03-31_13-30-551.jpg', 'Каждый день приближает нас к новым открытиям. 🚀🌟 ДЕНЬ')">
+                <img data-src="./img/photo_2025-03-31_13-30-55.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">17</div>
+				</div>
+				
+				
+				<div class="anniversary-frame" onclick="openModal('./img/PXL_20250401_162439869.jpg', 'Рост — это не просто цифры, это эмоции. 📊💖')">
+                <img data-src="./img/PXL_20250401_162439869_1.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">18</div>
+				</div>
+
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-02_20-41-31.jpg', 'Маленькие победы становятся большими достижениями. 🎉👶')">
+                <img data-src="./img/photo_2025-04-02_20-41-31.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">19</div>
+				</div>
+				
+
+							
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-03_09-09-53.jpg', '20-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-03_09-09-53.jpg" alt="Сплю" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">20</div>
+				</div>
+				
+				
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-05_12-42-45.jpg', '22-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-05_12-42-45.jpg" alt="22" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">22</div>
+				</div>
+				
+				
+								
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-06_12-07-09.jpg', '23-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-06_12-05-37.jpg" alt="23" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">23</div>
+				</div>
+				
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-07_22-34-17.jpg', '24-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-07_22-34-17.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">24</div>
+				</div>
+				
+				
+				
+								
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-08_09-48-31.jpg', '25-ый ДЕНЬ')">
+                <img data-src="./img/photo_2025-04-08_09-48-31.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">25</div>
+				</div>
+				
+				
+				
+								
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-14_21-08-33.jpg', 'Месяц')">
+                <img data-src="./img/photo_2025-04-14_21-08-33.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">Месяц</div>
+				</div>
+				
+				
+				        <div class="section-divider">
+            <div class="section-title" id="gl2">Глава - 2 <br>(Вес:3330г, Рост 54 см)</div>
+        </div>
+				
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-17_12-21-54.jpg', '1 месяц , 3 дня')">
+                <img data-src="./img/photo_2025-04-17_12-21-54.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">1 месяц , 3 дня </div>
+				</div>
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-24_18-57-37.jpg', '')">
+                <img data-src="./img/photo_2025-04-24_18-57-37_1.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text"> </div>
+				</div>
+				
+				
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-28_11-04-06.jpg', '')">
+                <img data-src="./img/photo_2025-04-28_11-04-06.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">Привет </div>
+				</div>
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-04-29_10-13-26.jpg', '1.5 месяца')">
+                <img data-src="./img/photo_2025-04-29_10-13-26.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">1.5 месяца </div>
+				</div>
+				
+												<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-03_00-32-40.jpg', 'с подругой')">
+                <img data-src="./img/photo_2025-05-03_00-32-40.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text"></div>
+				</div>
+				
+																<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-05_10-57-43.jpg', '')">
+                <img data-src="./img/photo_2025-05-05_10-57-43.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">с подругой</div>
+				</div>
+				
+				
+				
+				
+				
+																				<div class="anniversary-frame" onclick="openModal('./img/PXL_20250104_125917874.jpg', '')">
+                <img data-src="./img/PXL_20250104_125917874.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text"></div>
+				</div>
+				
+								
+																				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-12_12-47-25.jpg', '12.05.25')">
+                <img data-src="./img/photo_2025-05-12_12-47-25.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">12.05.25</div>
+				</div>
+				
+				
+																								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-14_18-18-22.jpg', '14.05.25')">
+                <img data-src="./img/photo_2025-05-14_18-18-22.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">14.05.25(2 месяца)</div>
+				</div>
+				
+				
+				        <div class="section-divider">
+            <div class="section-title" id="gl3">Глава - 3 <br>(Вес:4300г, Рост 56 см)</div>
+        </div>
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-15_15-20-43.jpg', '15.05.25')">
+                <img data-src="./img/photo_2025-05-15_15-20-43.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">15.05.25</div>
+				</div>
+				
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-15_20-39-14.jpg', '15.05.25')">
+                <img data-src="./img/photo_2025-05-15_20-39-14.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">15.05.25</div>
+				</div>
+				        
+				<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-15_23-10-40.jpg', '15.05.25')">
+                <img data-src="./img/photo_2025-05-15_23-10-40.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">15.05.25</div>
+				</div>
+				
+				
+
+		
+		
+		
+						<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-17_14-14-53.jpg', '16.05.25')">
+                <img data-src="./img/photo_2025-05-17_14-14-53.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">64 день</div>
+        </div>
+		
+		
+		
+		
+										<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-19_13-28-35.jpg', 'Скрыт')">
+                <img data-src="./img/photo_2025-05-19_13-28-35.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">Скрыт</div>
+        </div>
+		
+								<div class="anniversary-frame" onclick="openModal('./img/photo_2025-05-20_10-15-51.jpg', '67 день')">
+                <img data-src="./img/photo_2025-05-20_10-15-51.jpg" alt="24" class="anniversary-photo" loading="lazy">
+                     <div class="placeholder"></div>
+                <div class="anniversary-text">67 день</div>
+        </div>
+		
+		
+		
+		
+				
+			
+            </div> 
+        </div>
+    </div>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <p>С любовью создано для Валерии © 2025</p>
+
+        </div>
+    </footer>
+
+    <!-- Кнопка "Наверх" -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Модальное окно для увеличенного просмотра -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+ 
+            <img id="modalImage" src="" alt="">
+            <div class="modal-text" id="modalText"></div>
+        </div>
+    </div>
+	   <!-- Скрипт для создания частиц -->
+    <script>
+        // Создание частиц
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            const particleCount = 150; // Количество частиц
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Начальная позиция
+                const startX = Math.random() * window.innerWidth;
+                const startY = Math.random() * window.innerHeight;
+                
+                // Конечная позиция (случайное направление)
+                const angle = Math.random() * Math.PI * 2;
+                const distance = 100 + Math.random() * 300;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                // Случайный размер и задержка анимации
+                const size = 1 + Math.random() * 3;
+                const delay = Math.random() * 5;
+                const duration = 2 + Math.random() * 3; // Быстрая анимация как в DOOM
+                
+                // Применяем стили
+                particle.style.left = `${startX}px`;
+                particle.style.top = `${startY}px`;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // Цвет частицы (можно сделать оранжевые как в DOOM)
+                const isOrange = Math.random() > 0.7;
+                if (isOrange) {
+                    particle.style.background = 'rgba(255, 100, 0, 0.8)';
+                    particle.style.boxShadow = '0 0 10px 2px rgba(255, 100, 0, 0.5)';
+                } else {
+                    const brightness = 150 + Math.random() * 105;
+                    particle.style.background = `rgba(${brightness}, ${brightness}, ${brightness}, 0.7)`;
+                }
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // Инициализация при загрузке
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            // Пересоздаем частицы при изменении размера окна
+            window.addEventListener('resize', () => {
+                const container = document.getElementById('particlesContainer');
+                container.innerHTML = '';
+                createParticles();
+            });
+        });
+    </script>
+<script src="js_index.js"></script>
+    <!-- Bootstrap JS и зависимости -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	
+    
+    <script>
+     
+    </script>
+</body>
+</html>
