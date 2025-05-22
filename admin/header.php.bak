@@ -1,0 +1,88 @@
+<?php require_once 'config.php'; checkAuth(); ?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка - История роста Валерии</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            padding: 0;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+            padding: 12px 20px;
+        }
+        .sidebar .nav-link:hover {
+            color: rgba(255, 255, 255, 1);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            padding: 20px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="index.php">Админпанель</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../" target="_blank">
+                        <i class="fas fa-external-link-alt mr-1"></i> Посмотреть сайт
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">
+                        <i class="fas fa-sign-out-alt mr-1"></i> Выход
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar p-0">
+                <div class="p-3">
+                    <h4 class="text-white">Меню</h4>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'index.php' ? 'active' : '' ?>" 
+                           href="index.php">
+                            <i class="fas fa-home mr-2"></i> Главная
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'chapters.php' ? 'active' : '' ?>" 
+                           href="chapters.php">
+                            <i class="fas fa-book mr-2"></i> Главы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'photos.php' ? 'active' : '' ?>" 
+                           href="photos.php">
+                            <i class="fas fa-images mr-2"></i> Фотографии
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="col-md-10 main-content">

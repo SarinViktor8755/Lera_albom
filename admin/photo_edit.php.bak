@@ -1,0 +1,136 @@
+<?php
+require_once 'config.php';
+checkAuth();
+
+// Получаем ID фотографии для редактирования
+$photoId = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+
+// Получаем данные о фотографии
+$photo = [];
+$stmt = $pdo->prepare("SELECT * FROM photos WHERE id = ?");
+$stmt->execute([$photoId]);
+$photo = $stmt->fetch();
+
+if (!$photo) {
+    $_SESSION['error'] = "Фотография не найдена";
+    redirect('photos.php');
+}
+
+// Получаем список глав для выпадающего списка
+$chapters = $pdo->query("SELECT id, title FROM chapters ORDER BY title")->fetchAll();
+
+// Обработка формы редактирования
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['edit_photo'])) {
+    $chapterId = (int)$_POST['chapter_id'];
+    $title = $_POST['title'] ?? '';
+    $description = $_POST['description'] ?? '';
+    
+    if (!empty($title) && $chapterId > 0) {
+        // Если загружено новое изображение
+        if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+            $uploadDir = '../img/';
+            $fileName = uniqid() . '_' . basename($_FILES['photo']['name']);
+            $targetPath = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetPath)) {
+                // Удаляем старый файл
+                $oldFilePath = '../' . ltrim($photo['file_path'], './');
+                if (file_exists($oldFilePath)) {
+                    unlink($oldFilePath);
+                }
+                
+                $filePath = '../img/' . $fileName;
+            } else {
+                $_SESSION['error'] = "Ошибка при загрузке нового файла";
+                redirect("photo_edit.php?id=$photoId");
+            }
+        } else {
+            // Оставляем старый файл
+            $filePath = $photo['file_path'];
+        }
+        
+        // Обновляем запись в базе данных
+        $stmt = $pdo->prepare("UPDATE photos SET chapter_id = ?, title = ?, description = ?, file_path = ? WHERE id = ?");
+        $stmt->execute([$chapterId, $title, $description, $filePath, $photoId]);
+        
+        $_SESSION['success'] = "Фотография успешно обновлена";
+        redirect('photos.php');
+    } else {
+        $_SESSION['error'] = "Заполните обязательные поля";
+        redirect("photo_edit.php?id=$photoId");
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование фотографии</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <?php include 'header.php'; ?>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <?php include 'sidebar.php'; ?>
+            
+            <div class="col-md-10 main-content">
+                <h2>Редактирование фотографии</h2>
+                
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-danger"><?= $_SESSION['error'] ?></div>
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="chapter_id">Глава</label>
+                                <select class="form-control" id="chapter_id" name="chapter_id" required>
+                                    <option value="">-- Выберите главу --</option>
+                                    <?php foreach ($chapters as $chapter): ?>
+                                        <option value="<?= $chapter['id'] ?>" <?= $chapter['id'] == $photo['chapter_id'] ? 'selected' : '' ?>>
+                                            <?= htmlspecialchars($chapter['title']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Название фотографии</label>
+                                <input type="text" class="form-control" id="title" name="title" 
+                                       value="<?= htmlspecialchars($photo['title']) ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Описание</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"><?= 
+                                    htmlspecialchars($photo['description']) ?></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Текущее изображение</label><br>
+                                <img src="<?= htmlspecialchars($photo['file_path']) ?>" 
+                                     alt="<?= htmlspecialchars($photo['title']) ?>" 
+                                     style="max-width: 300px; max-height: 300px; margin-bottom: 15px;">
+                            </div>
+                            <div class="form-group">
+                                <label for="photo">Новое изображение (оставьте пустым, чтобы не изменять)</label>
+                                <input type="file" class="form-control-file" id="photo" name="photo" accept="image/*">
+                            </div>
+                            <button type="submit" name="edit_photo" class="btn btn-primary">Сохранить изменения</button>
+                            <a href="photos.php" class="btn btn-secondary">Отмена</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

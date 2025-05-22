@@ -1,0 +1,84 @@
+<?php
+require_once 'config.php';
+checkAuth();
+?>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админка - История роста Валерии</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .sidebar .nav-link:hover {
+            color: rgba(255, 255, 255, 1);
+        }
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .main-content {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Сайдбар -->
+            <div class="col-md-2 sidebar p-0">
+                <div class="p-3">
+                    <h4 class="text-white">Админпанель</h4>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.php"><i class="fas fa-home mr-2"></i> Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chapters.php"><i class="fas fa-book mr-2"></i> Главы</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="photos.php"><i class="fas fa-images mr-2"></i> Фотографии</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i> Выход</a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Основное содержимое -->
+            <div class="col-md-10 main-content">
+                <h2>Добро пожаловать в админку</h2>
+                <p>Здесь вы можете управлять содержимым сайта "История роста Валерии".</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Статистика</h5>
+                                <p class="card-text">
+                                    <?php
+                                    $chaptersCount = $pdo->query("SELECT COUNT(*) FROM chapters")->fetchColumn();
+                                    $photosCount = $pdo->query("SELECT COUNT(*) FROM photos")->fetchColumn();
+                                    ?>
+                                    <strong>Глав:</strong> <?= $chaptersCount ?><br>
+                                    <strong>Фотографий:</strong> <?= $photosCount ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
